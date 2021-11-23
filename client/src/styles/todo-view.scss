@@ -1,0 +1,25 @@
+.todos-container {
+  display: flex;
+  justify-content: center;
+}
+
+.todos-list {
+  list-style: none;
+  padding: 0;
+}
+
+.add-todo {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+
+  & > div:first-child {
+    display: flex;
+    gap: 1rem;
+    min-width: 360px;
+
+    input {
+      width: 70%;
+    }
+  }
+}

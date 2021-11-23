@@ -1,0 +1,38 @@
+.todo {
+  background-color: azure;
+  border-radius: 3px;
+  margin-top: 2rem;
+  padding: 1rem;
+}
+
+.todo__todo-name {
+  font-size: 2rem;
+}
+
+.todo__buttons-container {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0 2rem;
+}
+
+.todo__button:hover {
+  cursor: pointer;
+}
+
+.button--edit {
+  background-color: #ffeac2;
+  border-color: #ffa90a;
+}
+
+.button--edit:hover {
+  background-color: #ffa90a;
+}
+
+.button--danger {
+  background-color: #fcd9e6;
+  border-color: #f3689b;
+}
+
+.button--danger:hover {
+  background-color: #f3689b;
+}

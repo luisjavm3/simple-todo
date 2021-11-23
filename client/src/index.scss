@@ -1,0 +1,24 @@
+@import './styles/header.scss';
+@import './styles/todo-view.scss';
+@import './styles/todo.scss';
+@import './styles/edit-todo.scss';
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.todo__button {
+  border: thin solid;
+  border-radius: 3px;
+  flex-grow: 1;
+  text-transform: capitalize;
+}

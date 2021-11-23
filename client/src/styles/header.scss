@@ -1,0 +1,51 @@
+.header {
+  background-color: #b8e0df;
+}
+
+.header__title-bar {
+  background-color: #346883;
+  height: 3rem;
+}
+
+.header__title {
+  color: white;
+  display: block;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.header__menu-container {
+  display: flex;
+  height: 3.5rem;
+}
+
+.header__logo {
+  width: 10rem;
+}
+
+.header__menu {
+  display: flex;
+  flex-grow: 1;
+}
+
+.header__navigation-menu {
+  flex-grow: 1;
+}
+
+/* .header__auth-options ul {
+
+} */
+
+.header__auth-options ul {
+  align-items: flex-end;
+  display: flex;
+  gap: 0.5rem;
+  height: 100%;
+  list-style: none;
+  margin: 0 1rem;
+  padding: 0;
+}
+
+.header__auth-options a {
+  text-decoration: none;
+}
