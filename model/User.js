@@ -52,7 +52,7 @@ UserSchema.methods.comparePassword = function (candidatePassword) {
   return bcrypt.compareSync(candidatePassword, this.password);
 };
 
-User.methods.isMatch = function (password) {
+UserSchema.methods.isMatch = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
 
