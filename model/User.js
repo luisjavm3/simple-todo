@@ -41,9 +41,10 @@ UserSchema.pre('save', function (next) {
   // If the password has not been modified(or new), keep it the same.
   if (!this.isModified('password')) return next();
 
-  const SALT_WORK_FACTOR = process.env.SALT_WORK_FACTOR || 10;
+  const SALT_WORK_FACTOR = parseInt(process.env.SALT_WORK_FACTOR) || 10;
   const salt = bcrypt.genSaltSync(SALT_WORK_FACTOR);
   this.password = bcrypt.hashSync(this.password, salt);
+  return next();
 });
 
 UserSchema.methods.comparePassword = function (candidatePassword) {
