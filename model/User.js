@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 const validateEmail = require('../utils/validateEmail');
@@ -49,6 +50,10 @@ UserSchema.pre('save', function (next) {
 
 UserSchema.methods.comparePassword = function (candidatePassword) {
   return bcrypt.compareSync(candidatePassword, this.password);
+};
+
+User.methods.isMatch = function (password) {
+  return bcrypt.compareSync(password, this.password);
 };
 
 const User = mongoose.model('User', UserSchema);
