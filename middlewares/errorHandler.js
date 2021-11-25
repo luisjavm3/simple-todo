@@ -14,6 +14,15 @@ const errorHandler = (err, req, res, next) => {
     return res.status(403).json({ type: 'ValidationError', errors });
   }
 
+  if (err.code === 11000) {
+    let errors = {};
+    const type = 'ValidationError';
+    const field = Object.keys(err.keyValue)[0];
+    errors[field] = `${field} already exists.`;
+
+    return res.status(403).json({ type, errors });
+  }
+
   res.status(400).json({ error: err?.message, stack: err });
 };
 
