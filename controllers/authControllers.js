@@ -1,12 +1,9 @@
 const User = require('../model/User');
-const ValidationError = require('../utils/ValidationError');
 
 const signup = async (req, res) => {
-  const { email } = req.body;
-
   const newUser = await User.create(req.body);
 
-  res.send(newUser);
+  res.status(200).json(newUser);
 };
 
 const signin = (req, res) => {};
