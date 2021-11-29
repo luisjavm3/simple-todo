@@ -4,14 +4,21 @@ const errorHandler = (err, req, res, next) => {
   if (err instanceof ErrorResponse)
     return res.status(err.code).json({ error: err.message });
 
-  if (err.name === 'ValidationError') {
-    let errors = {};
+  switch (err.name) {
+    case 'ValidationError':
+      let errors = {};
 
-    Object.keys(err.errors).map((key) => {
-      errors[key] = err.errors[key].message;
-    });
+      Object.keys(err.errors).map((key) => {
+        errors[key] = err.errors[key].message;
+      });
 
-    return res.status(403).json({ type: 'ValidationError', errors });
+      return res.status(403).json({ type: 'ValidationError', errors });
+
+    case 'JsonWebTokenError':
+      return res.status(403).json({ error: err.message });
+
+    default:
+      break;
   }
 
   if (err.code === 11000) {
