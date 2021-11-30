@@ -13,6 +13,7 @@ import ProtectedRoute from './ProtectedRoute';
 import { useSelector } from 'react-redux';
 import TodoView from '../views/TodoView';
 import EditTodo from '../views/EditTodo';
+import Signup from '../views/Signup';
 
 const AppRoutes = () => {
   const user = useSelector((state) => state.user);
@@ -27,6 +28,7 @@ const AppRoutes = () => {
         />
 
         <Route path="/signin" element={<Signin />} />
+        <Route path="/signup" element={<Signup />} />
 
         <Route
           path="/todo"

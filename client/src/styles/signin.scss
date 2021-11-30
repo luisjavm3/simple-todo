@@ -1,0 +1,29 @@
+.signin {
+  justify-content: center;
+  display: flex;
+  min-height: 100vh;
+  min-width: 100vw;
+}
+
+.signin__content {
+  width: 30rem;
+
+  input[type='text'],
+  input[type='email'],
+  input[type='password'] {
+    width: 100%;
+  }
+}
+
+.signin__title {
+  margin: 3rem;
+  text-align: center;
+}
+
+.form-group {
+  margin-top: 2rem;
+}
+
+.form-button {
+  width: 100%;
+}

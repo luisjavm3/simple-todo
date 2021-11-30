@@ -39,29 +39,49 @@ const Signin = () => {
 
   return (
     <div className="signin">
-      <h1>SignIn</h1>
+      <div className="signin__content">
+        <h1 className="signin__title">SignIn</h1>
 
-      {error && (
-        <span style={{ backgroundColor: 'tomato', color: 'white' }}>
-          {error}
-        </span>
-      )}
+        {error && (
+          <span style={{ backgroundColor: 'tomato', color: 'white' }}>
+            {error}
+          </span>
+        )}
 
-      <form>
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" onChange={changeHandler} />
-        </div>
+        <form>
+          <div className="form-group">
+            <div>
+              <label htmlFor="email">
+                <strong>Email</strong>
+              </label>
+            </div>
+            <div>
+              <input type="email" id="email" onChange={changeHandler} />
+            </div>
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input type="password" id="password" onChange={changeHandler} />
-        </div>
+          <div className="form-group">
+            <div>
+              <label htmlFor="password">
+                <strong>Password</strong>
+              </label>
+            </div>
+            <div>
+              <input type="password" id="password" onChange={changeHandler} />
+            </div>
+          </div>
 
-        <button type="submit" onClick={signinHandler}>
-          Signin
-        </button>
-      </form>
+          <div className="form-group">
+            <button
+              className="form-button"
+              type="submit"
+              onClick={signinHandler}
+            >
+              Signin
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
