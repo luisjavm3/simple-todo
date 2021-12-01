@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { signin } from '../redux/actions/userActions';
+import { signin, signup } from '../redux/actions/userActions';
 
 const Signup = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [gender, setGender] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -46,10 +47,14 @@ const Signup = () => {
     }
   };
 
+  const radioChange = (e) => {
+    setGender(e.target.value);
+  };
+
   const signupHandler = (e) => {
     e.preventDefault();
 
-    // dispatch(signin(email, password, navigate));
+    dispatch(signup(firstName, lastName, email, gender, password));
   };
 
   return (
@@ -97,15 +102,28 @@ const Signup = () => {
             </div>
           </div>
 
+          {/* Gender section */}
           <div className="form-group">
             <div className="signup__gender-container">
               <div>
-                <input type="Radio" name="gender" value="Male" id="male" />
+                <input
+                  type="radio"
+                  name="gender"
+                  value="Male"
+                  id="male"
+                  onChange={(e) => radioChange(e)}
+                />
                 <label htmlFor="male">Male</label>
               </div>
 
               <div>
-                <input type="Radio" name="gender" value="Female" id="female" />
+                <input
+                  type="radio"
+                  name="gender"
+                  value="Female"
+                  id="female"
+                  onChange={(e) => radioChange(e)}
+                />
                 <label htmlFor="female">Female</label>
               </div>
             </div>
