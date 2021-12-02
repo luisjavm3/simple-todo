@@ -1,6 +1,7 @@
 const express = require('express');
 require('express-async-errors');
 const dotenv = require('dotenv');
+const cors = require('cors');
 const { json } = require('express');
 const mongoose = require('mongoose');
 const errorHandler = require('./middlewares/errorHandler.js');
@@ -23,6 +24,7 @@ mongoose.connect(MONGO_URI, (err) => {
 const app = express();
 
 app.use(json());
+app.use(cors());
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/todos', todoRoutes);

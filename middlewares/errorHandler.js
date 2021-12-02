@@ -12,7 +12,7 @@ const errorHandler = (err, req, res, next) => {
         errors[key] = err.errors[key].message;
       });
 
-      return res.status(403).json({ type: 'ValidationError', errors });
+      return res.status(400).json({ type: 'ValidationError', errors });
 
     case 'JsonWebTokenError':
       return res.status(403).json({ error: err.message });

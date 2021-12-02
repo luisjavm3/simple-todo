@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux';
 import { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
 
 import Header from '../components/Header';
 import Todo from '../components/Todo';
@@ -35,7 +34,7 @@ const TodoView = () => {
     }
 
     fetchTodos(token);
-  }, []);
+  }, [token]);
 
   return (
     <div>

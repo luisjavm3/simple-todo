@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 const validateEmail = require('../utils/validateEmail');
