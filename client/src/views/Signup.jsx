@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+// import Swal from 'sweetalert2';
 
-import { signin, signup } from '../redux/actions/userActions';
+import { signup } from '../redux/actions/authActions.js';
 
 const Signup = () => {
   const [firstName, setFirstName] = useState('');
@@ -12,8 +13,17 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const user = useSelector((state) => state.user);
-  const { error, user: userObj } = user;
+  // Errors
+  const [isMatch, setIsMatch] = useState(true);
+  const [firstNameError, setFirstNameError] = useState('');
+  const [lastNameError, setLastNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [genderError, setGenderError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [generalError, setGeneralError] = useState('');
+
+  const auth = useSelector((state) => state.auth);
+  const { error, token } = auth;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -36,10 +46,22 @@ const Signup = () => {
 
       case 'password':
         setPassword(value);
+
+        if (e.target.value === confirmPassword) {
+          setIsMatch(true);
+        } else {
+          setIsMatch(false);
+        }
         break;
 
       case 'confirm-password':
         setConfirmPassword(value);
+
+        if (password === e.target.value) {
+          setIsMatch(true);
+        } else {
+          setIsMatch(false);
+        }
         break;
 
       default:
@@ -54,22 +76,80 @@ const Signup = () => {
   const signupHandler = (e) => {
     e.preventDefault();
 
-    dispatch(signup(firstName, lastName, email, gender, password));
+    if (password === confirmPassword && password.length > 0) {
+      // setGeneralError('');
+      dispatch(signup(firstName, lastName, email, gender, password));
+    } else {
+      setPassword('');
+      setConfirmPassword('');
+      e.target.form[5].value = '';
+      e.target.form[6].value = '';
+      // setGeneralError('Introduce a valid password.');
+    }
   };
+
+  useEffect(() => {
+    // If error is an JSON object
+    if (error) {
+      const foo = JSON.parse(error);
+
+      if (typeof foo === 'object' && !Array.isArray(foo) && foo !== null) {
+        if (foo.first_name) {
+          setFirstNameError(foo.first_name);
+        } else {
+          setFirstNameError('');
+        }
+
+        if (foo.last_name) {
+          setLastNameError(foo.last_name);
+        } else {
+          setLastNameError('');
+        }
+
+        if (foo.email) {
+          setEmailError(foo.email);
+        } else {
+          setEmailError('');
+        }
+
+        if (foo.gender) {
+          setGenderError(foo.gender);
+        } else {
+          setGenderError('');
+        }
+
+        if (foo.password) {
+          setPasswordError(foo.password);
+        } else {
+          setPasswordError('');
+        }
+      } else {
+        setGeneralError(error);
+      }
+    }
+
+    if (token) navigate('/todos');
+  }, [
+    error,
+    firstNameError,
+    lastNameError,
+    emailError,
+    genderError,
+    passwordError,
+    token,
+    navigate,
+  ]);
 
   return (
     <div className="signin">
       <div className="signin__content">
         <h1 className="signin__title">SignUp</h1>
 
-        {error && (
-          <span style={{ backgroundColor: 'tomato', color: 'white' }}>
-            {error}
-          </span>
-        )}
+        {generalError && <span className="alert">{generalError}</span>}
 
         <form>
           <div className="form-group">
+            {firstNameError && <span className="alert">{firstNameError}</span>}
             <div>
               <label htmlFor="first-name">
                 <strong>First name</strong>
@@ -81,6 +161,7 @@ const Signup = () => {
           </div>
 
           <div className="form-group">
+            {lastNameError && <span className="alert">{lastNameError}</span>}
             <div>
               <label htmlFor="last-name">
                 <strong>Last name</strong>
@@ -92,6 +173,7 @@ const Signup = () => {
           </div>
 
           <div className="form-group">
+            {emailError && <span className="alert">{emailError}</span>}
             <div>
               <label htmlFor="email">
                 <strong>Email</strong>
@@ -104,6 +186,7 @@ const Signup = () => {
 
           {/* Gender section */}
           <div className="form-group">
+            {genderError && <span className="alert">{genderError}</span>}
             <div className="signup__gender-container">
               <div>
                 <input
@@ -130,17 +213,28 @@ const Signup = () => {
           </div>
 
           <div className="form-group">
+            {passwordError && <span className="alert">{passwordError}</span>}
+
             <div>
               <label htmlFor="password">
                 <strong>Password</strong>
               </label>
             </div>
             <div>
-              <input type="password" id="password" onChange={changeHandler} />
+              <input
+                type="password"
+                id="password"
+                onChange={changeHandler}
+                autoComplete="off"
+              />
             </div>
           </div>
 
           <div className="form-group">
+            {!isMatch && (
+              <span className="alert">Confirm Password does not match.</span>
+            )}
+
             <div>
               <label htmlFor="confirm-password">
                 <strong>Confirm password</strong>
@@ -151,6 +245,7 @@ const Signup = () => {
                 type="password"
                 id="confirm-password"
                 onChange={changeHandler}
+                autoComplete="off"
               />
             </div>
           </div>

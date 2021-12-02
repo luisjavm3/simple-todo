@@ -1,12 +1,14 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 
-import userReducer from './reducers/userReducer';
+import tokenReducer from './reducers/authReducer';
 
-const reducer = combineReducers({ user: userReducer });
+const reducer = combineReducers({ auth: tokenReducer });
 
 const initialState = {
-  user: { user: JSON.parse(localStorage.getItem('todo_store'))?.user || null },
+  auth: {
+    token: JSON.parse(localStorage.getItem('simple_todo'))?.auth.token || null,
+  },
 };
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

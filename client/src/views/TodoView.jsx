@@ -1,31 +1,47 @@
 import { useSelector } from 'react-redux';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
+import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
-import data from '../data';
 import Header from '../components/Header';
 import Todo from '../components/Todo';
 import { useLocation, Outlet } from 'react-router-dom';
 
 const TodoView = () => {
   const [text, setText] = useState('');
+  const [todos, setTodos] = useState([]);
 
-  const user = useSelector((state) => state.user);
-  const { user: userObj } = user;
+  const auth = useSelector((state) => state.auth);
+  const { token } = auth;
 
   const location = useLocation();
 
-  const todos = findTodosFromUser(userObj);
-
   const addTodoHandler = () => {
-    addTodo(text, userObj);
+    // addTodo(text, userObj);
   };
+
+  useEffect(() => {
+    async function fetchTodos(token) {
+      const { data: user } = await axios.get(`http://localhost:5000/users/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const { data } = await axios.get(
+        `http://localhost:5000/users/${user._id}/todos`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setTodos(data);
+    }
+
+    fetchTodos(token);
+  }, []);
 
   return (
     <div>
       <Header />
 
-      {location.pathname === '/todo' ? (
+      {location.pathname === '/todos' ? (
         <Fragment>
           <div className="add-todo">
             <div>
@@ -43,7 +59,7 @@ const TodoView = () => {
           <div className="todos-container">
             <ul className="todos-list">
               {todos.map((todo) => (
-                <Todo todo={todo} key={todo.id} />
+                <Todo todo={todo} key={todo._id} />
               ))}
             </ul>
           </div>
@@ -53,17 +69,6 @@ const TodoView = () => {
       )}
     </div>
   );
-};
-
-const findTodosFromUser = (user) => {
-  return data.todos.filter((todo) => todo.user === user.id);
-};
-
-const addTodo = (text, user) => {
-  const newTodo = { id: uuidv4(), name: text, user: user.id };
-
-  console.log(newTodo);
-  data.todos.push(newTodo);
 };
 
 export default TodoView;

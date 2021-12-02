@@ -6,9 +6,9 @@ import {
   USER_SIGNUP_FAIL,
   USER_SIGNUP_REQUEST,
   USER_SIGNUP_SUCCESS,
-} from '../constants/userConstants';
+} from '../constants/authConstants';
 
-const userReducer = (state = { user: null }, action) => {
+const tokenReducer = (state = { token: null }, action) => {
   const { type, payload } = action;
 
   switch (type) {
@@ -18,18 +18,18 @@ const userReducer = (state = { user: null }, action) => {
 
     case USER_SIGNIN_SUCCESS:
     case USER_SIGNUP_SUCCESS:
-      return { loading: false, user: payload };
+      return { loading: false, token: payload };
 
     case USER_SIGNIN_FAIL:
     case USER_SIGNUP_FAIL:
       return { loading: false, error: payload };
 
     case USER_LOGOUT_SUCCESS:
-      return { user: null };
+      return { token: null };
 
     default:
       return state;
   }
 };
 
-export default userReducer;
+export default tokenReducer;

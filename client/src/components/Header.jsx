@@ -1,11 +1,15 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { logout } from '../redux/actions/userActions';
+import axios from 'axios';
+
+import { logout } from '../redux/actions/authActions';
 
 const Header = () => {
-  const user = useSelector((state) => state.user);
-  const { user: userObj } = user;
+  const auth = useSelector((state) => state.auth);
+  const { token: tokenObj } = auth;
+
+  const [user, setUser] = useState(null);
 
   const navigate = useNavigate();
 
@@ -16,14 +20,26 @@ const Header = () => {
     navigate('/');
   };
 
+  useEffect(() => {
+    async function fetchUser() {
+      const { data } = await axios.get(`http://localhost:5000/users/me`, {
+        headers: { Authorization: `Bearer ${tokenObj}` },
+      });
+
+      setUser(data);
+    }
+
+    if (tokenObj) fetchUser();
+  }, [tokenObj]);
+
   return (
     <div className="header">
       <div className="header__title-bar">
         <span className="header__title">
-          {userObj ? (
+          {user ? (
             <span>
-              {`${userObj.first_name} ${userObj.last_name} ${
-                userObj.role === 'ADMIN' ? '(ADMIN)' : ''
+              {`${user.first_name} ${user.last_name} ${
+                user.role === 'ADMIN' ? '(ADMIN)' : ''
               }`}
             </span>
           ) : (
@@ -42,7 +58,7 @@ const Header = () => {
 
           <div className="header__auth-options">
             <ul>
-              {!userObj ? (
+              {!user ? (
                 <Fragment>
                   <li>
                     <Link to="/signin">Signin</Link>

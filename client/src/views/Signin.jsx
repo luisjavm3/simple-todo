@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { signin } from '../redux/actions/userActions';
+import { signin } from '../redux/actions/authActions';
 
 const Signin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const user = useSelector((state) => state.user);
-  const { error, user: userObj } = user;
+  const auth = useSelector((state) => state.auth);
+  const { error, token } = auth;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -36,6 +36,10 @@ const Signin = () => {
 
     dispatch(signin(email, password, navigate));
   };
+
+  useEffect(() => {
+    if (token) navigate('/todos');
+  }, [navigate, token]);
 
   return (
     <div className="signin">
@@ -67,7 +71,12 @@ const Signin = () => {
               </label>
             </div>
             <div>
-              <input type="password" id="password" onChange={changeHandler} />
+              <input
+                type="password"
+                id="password"
+                autoComplete="off"
+                onChange={changeHandler}
+              />
             </div>
           </div>
 
