@@ -1,40 +1,25 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Fragment, useEffect, useState } from 'react';
-import axios from 'axios';
 
 import Header from '../components/Header';
 import Todo from '../components/Todo';
 import { useLocation, Outlet } from 'react-router-dom';
+import { getTodosFromAuthUser } from '../redux/actions/todosActions';
 
 const TodoView = () => {
+  const { loading, todos } = useSelector((state) => state.todos);
+  const dispatch = useDispatch();
   const [text, setText] = useState('');
-  const [todos, setTodos] = useState([]);
-
-  const auth = useSelector((state) => state.auth);
-  const { token } = auth;
 
   const location = useLocation();
 
   const addTodoHandler = () => {
-    // addTodo(text, userObj);
+    console.log(text);
   };
 
   useEffect(() => {
-    async function fetchTodos(token) {
-      const { data: user } = await axios.get(`http://localhost:5000/users/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const { data } = await axios.get(
-        `http://localhost:5000/users/${user._id}/todos`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      setTodos(data);
-    }
-
-    fetchTodos(token);
-  }, [token]);
+    if (!todos) dispatch(getTodosFromAuthUser());
+  }, [dispatch, todos]);
 
   return (
     <div>
@@ -55,9 +40,11 @@ const TodoView = () => {
             </div>
           </div>
 
+          {loading && <span>Loading...</span>}
+
           <div className="todos-container">
             <ul className="todos-list">
-              {todos.map((todo) => (
+              {todos?.map((todo) => (
                 <Todo todo={todo} key={todo._id} />
               ))}
             </ul>

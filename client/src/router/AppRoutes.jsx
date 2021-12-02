@@ -24,7 +24,7 @@ const AppRoutes = () => {
       <Routes>
         <Route
           path="/"
-          element={token ? <Navigate to="/todo" replace /> : <Landing />}
+          element={token ? <Navigate to="/todos" replace /> : <Landing />}
         />
 
         <Route path="/signin" element={<Signin />} />
