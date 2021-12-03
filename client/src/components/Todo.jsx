@@ -1,15 +1,21 @@
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { getTodosFromAuthUser } from '../redux/actions/todosActions';
 
 const Todo = ({ todo }) => {
+  const { token } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const editHandler = () => {
-    navigate(`/todo/${todo.id}`);
+    navigate(`/todos/${todo._id}`);
   };
 
-  const deleteHandler = () => {
-    Swal.fire({
+  const deleteHandler = async () => {
+    await Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
       icon: 'warning',
@@ -19,7 +25,22 @@ const Todo = ({ todo }) => {
       confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+        axios
+          .delete(`http://localhost:5000/todos/${todo._id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then(() => {
+            dispatch(getTodosFromAuthUser());
+            Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+          })
+          .catch((error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: error.message || 'Something went wrong!',
+              footer: 'Error deleting todo.',
+            });
+          });
       }
     });
   };

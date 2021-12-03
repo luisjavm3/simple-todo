@@ -1,25 +1,47 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Fragment, useEffect, useState } from 'react';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 import Header from '../components/Header';
 import Todo from '../components/Todo';
-import { useLocation, Outlet } from 'react-router-dom';
+import { useLocation, Outlet, useNavigate } from 'react-router-dom';
 import { getTodosFromAuthUser } from '../redux/actions/todosActions';
 
 const TodoView = () => {
   const { loading, todos } = useSelector((state) => state.todos);
-  const dispatch = useDispatch();
-  const [text, setText] = useState('');
+  const { token } = useSelector((state) => state.auth);
 
   const location = useLocation();
 
-  const addTodoHandler = () => {
-    console.log(text);
+  const dispatch = useDispatch();
+  const [text, setText] = useState('');
+
+  const addTodoHandler = async () => {
+    if (!text) {
+      return Swal.fire('Insert a todos name.');
+    }
+
+    try {
+      await axios.post(
+        `http://localhost:5000/todos`,
+        { name: text },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      dispatch(getTodosFromAuthUser());
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error?.response.data.errors.name || error.message,
+      });
+    }
   };
 
   useEffect(() => {
-    if (!todos) dispatch(getTodosFromAuthUser());
-  }, [dispatch, todos]);
+    dispatch(getTodosFromAuthUser());
+  }, [dispatch]);
 
   return (
     <div>
