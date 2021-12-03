@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+
+import { getTodosFromAuthUser } from '../redux/actions/todosActions';
 
 const EditTodo = () => {
   const { token } = useSelector((state) => state.auth);
@@ -11,7 +13,7 @@ const EditTodo = () => {
   const [todo, setTodo] = useState('');
 
   const navigate = useNavigate();
-  const location = useLocation();
+  const dispatch = useDispatch();
 
   const changeHandler = (e) => {
     e.preventDefault();
@@ -23,13 +25,13 @@ const EditTodo = () => {
     e.preventDefault();
 
     try {
-      const TODO = await axios.put(
+      await axios.put(
         `http://localhost:5000/todos/${ID}`,
         { name: text },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // setTodo(TODO);
+      dispatch(getTodosFromAuthUser());
       navigate('/todos');
     } catch (error) {
       Swal.fire({
@@ -54,7 +56,6 @@ const EditTodo = () => {
       } catch (error) {}
 
       setTodo(todo);
-      // editorRef.current.querySelector('#text-input').value = todo.name;
       document.getElementById('text-input').value = todo.name;
     }
 
